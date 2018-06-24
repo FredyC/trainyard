@@ -1,0 +1,42 @@
+{
+  "React SFC": {
+    "prefix": "sfc",
+    "body": [
+      "import React from 'react'",
+      "",
+      "interface IProps {}",
+      "",
+      "export const ${1:$TM_FILENAME_BASE}: React.SFC<IProps> = (props) => (",
+      "  <>",
+      "    ${2}",
+      "  </>",
+      ")"
+    ]
+  },
+  "React Styled": {
+    "prefix": "styl",
+    "body": [
+      "import styled from 'styled-components'",
+      "",
+      "export const ${1:$TM_FILENAME_BASE} = styled.${2:div}`",
+      "  ${3}",
+      "`",
+      "",
+      "$1.displayName = '$1'"
+    ]
+  },
+  "Storybook skeleton": {
+    "prefix": "story",
+    "body": [
+      "import { storiesOf } from '@storybook/react'",
+      "import React from 'react'",
+      "",
+      "import { $1 } from './$1'",
+      "",
+      "storiesOf('${1:$TM_FILENAME_BASE}', module)",
+      "  .add('${2}', () => (",
+      "    <${1} />",
+      "  ))"
+    ]
+  }
+}
