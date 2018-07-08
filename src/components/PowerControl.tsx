@@ -16,7 +16,7 @@ const PowerControlContainer = styled.div`
   color: white;
 `
 
-export class PowerControl extends React.Component<IProps> {
+export class PowerControl extends React.PureComponent<IProps> {
   componentDidMount() {
     KeyboardJS.bind(
       ['numadd'],

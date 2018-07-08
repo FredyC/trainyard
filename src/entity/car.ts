@@ -9,15 +9,24 @@ export interface IEngineCar {
   slowDown: number
 }
 
-export function createCar() {
+export function createCar(x: number, y: number, degrees: number) {
   const car = Composite.create({ label: 'Car' })
   const carBody = Bodies.rectangle(0, 0, 90, 45, {
-    density: 1,
+    density: 2,
     frictionAir: 0.2,
     frictionStatic: 5,
+    chamfer: {
+      radius: 7,
+    },
   })
 
   Composite.add(car, carBody)
+  Composite.translate(car, { x, y })
+  Composite.rotate(car, toRadians(degrees), {
+    x: carBody.position.x,
+    y: carBody.position.y,
+  })
+  Composite.scale(car, 0.5, 0.5, carBody.position)
 
   return {
     ...car,
@@ -25,16 +34,16 @@ export function createCar() {
       return carBody
     },
     get maxSpeed() {
-      return 5
+      return 3
     },
     get acceleration() {
-      return 2 / carBody.mass
+      return 1 / carBody.mass
     },
     get brakingPower() {
       return 1.5 / carBody.mass
     },
     get slowDown() {
-      return 0.5 / carBody.mass
+      return 0.05 / carBody.mass
     },
     getGearPower(gear: ECarGear) {
       switch (gear) {
@@ -49,20 +58,21 @@ export function createCar() {
     getDirectionPower(direction: ECarDirection) {
       return direction === ECarDirection.REVERSE ? -1 : 1
     },
-    translate(x: number, y: number) {
-      Composite.translate(car, { x, y })
-    },
-    rotate(degrees: number) {
-      Composite.rotate(car, toRadians(degrees), {
-        x: carBody.position.x,
-        y: carBody.position.y,
-      })
+    stop() {
+      Body.setVelocity(carBody, { x: 0, y: 0 })
     },
     drive(force: number) {
       Body.applyForce(
         carBody,
-        { x: carBody.position.x - 45, y: carBody.position.y },
+        { x: carBody.position.x, y: carBody.position.y },
         { x: force, y: 0 },
+      )
+    },
+    turn(force: number) {
+      Body.applyForce(
+        carBody,
+        { x: carBody.position.x + 45, y: carBody.position.y - 22 },
+        { x: force, y: force },
       )
     },
   }

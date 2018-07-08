@@ -12,6 +12,7 @@ const renderOptions: IRendererOptions = {
   showAngleIndicator: true,
   showVelocity: true,
   showPositions: true,
+  wireframes: process.env.NODE_ENV === 'development',
 }
 
 export class Scene extends React.PureComponent<IProps> {
