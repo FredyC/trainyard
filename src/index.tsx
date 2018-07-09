@@ -1,16 +1,17 @@
-import './polyfill'
+import './index.css'
 
-import { GameState } from 'components/GameState'
-import React from 'react'
-import { render } from 'react-dom'
+import Phaser from 'phaser'
+import { YardScene } from 'scenes/YardScene'
 
-import { Game } from './components/Game'
-import { createEngine } from './core/engine'
+const game = new Phaser.Game({
+  type: Phaser.AUTO,
+  width: window.innerWidth,
+  height: window.innerHeight,
+  scene: YardScene,
+  backgroundColor: '#222222',
+  title: 'Yard Master',
+})
 
-const engine = createEngine()
-
-const rootElement = document.getElementById('root')
-render(
-  <GameState>{state => <Game engine={engine} state={state} />}</GameState>,
-  rootElement,
+window.addEventListener('resize', event =>
+  game.resize(window.innerWidth, window.innerHeight),
 )

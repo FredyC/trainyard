@@ -3,7 +3,7 @@
     "baseUrl": "src",
     "module": "esnext",
     "target": "es2015",
-    "lib": ["esnext", "dom"],
+    "lib": ["esnext", "dom", "scripthost"],
     "sourceMap": true,
     "jsx": "react",
     "moduleResolution": "node",
