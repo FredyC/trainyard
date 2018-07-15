@@ -8,6 +8,7 @@ export class YardScene extends Phaser.Scene {
   preload() {
     this.load.image('ground', require('../assets/ground.jpg'))
     this.load.image('loco', 'assets/train_011.png')
+    this.load.image('car', 'assets/train_022.png')
   }
   engine: EngineCar
   cursors: CursorKeys
@@ -15,14 +16,18 @@ export class YardScene extends Phaser.Scene {
     this.createGround()
     this.createPaths()
     this.engine = this.createEngine()
+    this.engine.appendCar(this.add.image(0, 0, 'car'))
 
     this.cursors = this.input.keyboard.createCursorKeys()
 
     this.cameras.main.startFollow(this.engine)
 
-    this.events.on('resize', (width: number, height: number) => {
-      this.cameras.resize(width, height)
-    })
+    this.events.on('resize', this.onResize)
+    this.onResize(window.innerWidth, window.innerHeight)
+  }
+  onResize = (width: number, height: number) => {
+    this.cameras.resize(width, height)
+    this.cameras.main.setBounds(0, 0, width, height)
   }
   path: Phaser.Curves.Path
   getPoint(position: number) {
@@ -31,6 +36,7 @@ export class YardScene extends Phaser.Scene {
   private createEngine() {
     const engineCar = new EngineCar(this.scene.scene, 0, 0, 'loco')
     engineCar.setAngle(-90)
+    // engineCar.runNow(1)
     this.add.existing(engineCar)
 
     return engineCar
@@ -40,14 +46,12 @@ export class YardScene extends Phaser.Scene {
     ground.setScale(0.5, 0.5)
   }
   private createPaths() {
-    this.path = new Phaser.Curves.Path(100, 100)
+    this.path = new Phaser.Curves.Path(-100, 100)
     this.path.lineTo(300, 100)
-    this.path.ellipseTo(200, 200, 270, 360, false, 0)
-    const end = this.path.getEndPoint()
-    this.path.lineTo(end.x, end.y + 200)
+    this.path.cubicBezierTo(400, 800, 300, 100, 800, 150)
 
     const graphics = this.add.graphics()
-    graphics.lineStyle(1, 0xffffff, 1)
+    graphics.lineStyle(15, 0x2d1607, 0.7)
     this.path.draw(graphics, 128)
   }
   update() {

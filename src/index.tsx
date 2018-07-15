@@ -4,12 +4,11 @@ import Phaser from 'phaser'
 import { YardScene } from 'scenes/YardScene'
 
 const game = new Phaser.Game({
+  title: 'Yard Master',
   type: Phaser.AUTO,
   width: window.innerWidth,
   height: window.innerHeight,
-  scene: YardScene,
-  backgroundColor: '#222222',
-  title: 'Yard Master',
+  scene: YardScene
 })
 
 window.addEventListener('resize', event =>

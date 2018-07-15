@@ -11,11 +11,14 @@ export enum ECarDirection {
   REVERSE,
 }
 
+type TCar = Phaser.GameObjects.Image
+
 export class EngineCar extends Phaser.GameObjects.Image {
-  private position = 0
+  private position = 0.3
   private speed = 0
   private gear = ECarGear.NEUTRAL
   private direction = ECarDirection.FORWARD
+  private cars: TCar[] = []
   get maxSpeed() {
     return 3
   }
@@ -64,6 +67,17 @@ export class EngineCar extends Phaser.GameObjects.Image {
   powerOff() {
     this.gear = ECarGear.NEUTRAL
   }
+  runNow(speed: number) {
+    this.speed = speed
+  }
+  stopNow() {
+    this.gear = ECarGear.NEUTRAL
+    this.speed = 0
+  }
+  appendCar(car: Phaser.GameObjects.Image) {
+    this.cars.push(car)
+    car.setRotation(this.rotation)
+  }
   preUpdate(time: number, delta: number) {
     const speedChange = delta * this.getGearPower()
     this.speed = Phaser.Math.Clamp(this.speed + speedChange, 0, this.maxSpeed)
@@ -77,22 +91,32 @@ export class EngineCar extends Phaser.GameObjects.Image {
   getTrackLength() {
     return (this.scene as YardScene).path.getLength()
   }
-  rotateToward(point: Phaser.Math.Vector2) {
+  rotateToward(obj: Phaser.GameObjects.Image, point: Phaser.Math.Vector2) {
     const speedX = this.x - point.x
     const speedY = this.y - point.y
     const targetAngle = this.direction === ECarDirection.REVERSE ? -90 : 90
-    this.setRotation(
+    obj.setRotation(
       Math.atan2(speedY, speedX) + Phaser.Math.DegToRad(targetAngle),
     )
   }
   moveBy(position: number) {
     const nextPosition = this.position + position
+    if (nextPosition < 0 || nextPosition > 1) {
+      this.stopNow()
+      return
+    }
     const nextPoint = this.getPoint(nextPosition)
     if (nextPoint) {
       if (this.speed !== 0) {
-        this.rotateToward(nextPoint)
+        this.rotateToward(this, nextPoint)
       }
       this.setPosition(nextPoint.x, nextPoint.y)
+      this.cars.forEach(car => {
+        const carPosition = nextPosition - 0.093
+        const carPoint = this.getPoint(carPosition)
+        car.setPosition(carPoint.x, carPoint.y)
+        this.rotateToward(car, carPoint)
+      })
       this.position = nextPosition
     }
   }
