@@ -32,8 +32,10 @@
     "@types/react-dom": "^16.0.5",
     "@types/mainloop.js": "1.0.5",
     "@types/verror": "^1.10.3",
+    "now": "^11.2.9",
     "prettier": "^1.13.5",
     "react-inspector": "^2.3.0",
+    "rimraf": "^2.6.2",
     "tslint": "^5.10.0",
     "tslint-config-prettier": "^1.13.0",
     "typescript": "^2.9.2",
@@ -42,6 +44,10 @@
   "scripts": {
     "start": "react-app-rewired start --scripts-version react-scripts-ts",
     "build": "react-app-rewired build --scripts-version react-scripts-ts",
-    "test": "react-app-rewired --scripts-version=react-scripts-ts test --env=jsdom"
+    "test": "react-app-rewired --scripts-version=react-scripts-ts test --env=jsdom",
+    "deploy": "now switch fredyc && now build --public"
+  },
+  "now": {
+    "alias": "yardmaster"
   }
 }
