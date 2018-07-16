@@ -7227,7 +7227,7 @@ declare namespace Phaser {
              * [description]
              * @param points [description]
              */
-            splineTo(points: Phaser.Math.Vector2[]): Phaser.Curves.Path;
+            splineTo(points: (Phaser.Math.Vector2[]|number[]|number[][])): Phaser.Curves.Path;
 
             /**
              * [description]
@@ -7327,7 +7327,7 @@ declare namespace Phaser {
              * 
              * @param points [description]
              */
-            constructor(points?: Phaser.Math.Vector2[]);
+            constructor(points?: (Phaser.Math.Vector2[]|number[]|number[][]));
 
             /**
              * [description]

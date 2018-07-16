@@ -8,7 +8,7 @@ const game = new Phaser.Game({
   type: Phaser.AUTO,
   width: window.innerWidth,
   height: window.innerHeight,
-  scene: YardScene
+  scene: YardScene,
 })
 
 window.addEventListener('resize', event =>

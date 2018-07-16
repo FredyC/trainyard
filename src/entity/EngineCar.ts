@@ -14,7 +14,7 @@ export enum ECarDirection {
 type TCar = Phaser.GameObjects.Image
 
 export class EngineCar extends Phaser.GameObjects.Image {
-  private position = 0.3
+  private position = 0
   private speed = 0
   private gear = ECarGear.NEUTRAL
   private direction = ECarDirection.FORWARD
@@ -92,9 +92,9 @@ export class EngineCar extends Phaser.GameObjects.Image {
     return (this.scene as YardScene).path.getLength()
   }
   rotateToward(obj: Phaser.GameObjects.Image, point: Phaser.Math.Vector2) {
-    const speedX = this.x - point.x
-    const speedY = this.y - point.y
-    const targetAngle = this.direction === ECarDirection.REVERSE ? -90 : 90
+    const speedX = obj.x - point.x
+    const speedY = obj.y - point.y
+    const targetAngle = this.direction === ECarDirection.REVERSE ? 180 : 0
     obj.setRotation(
       Math.atan2(speedY, speedX) + Phaser.Math.DegToRad(targetAngle),
     )
@@ -111,11 +111,14 @@ export class EngineCar extends Phaser.GameObjects.Image {
         this.rotateToward(this, nextPoint)
       }
       this.setPosition(nextPoint.x, nextPoint.y)
-      this.cars.forEach(car => {
-        const carPosition = nextPosition - 0.093
+      this.cars.forEach((car, i) => {
+        const carOffset = car.width / this.getTrackLength()
+        const carPosition = nextPosition - carOffset * (i + 1)
         const carPoint = this.getPoint(carPosition)
+        if (this.speed !== 0) {
+          this.rotateToward(car, carPoint)
+        }
         car.setPosition(carPoint.x, carPoint.y)
-        this.rotateToward(car, carPoint)
       })
       this.position = nextPosition
     }
